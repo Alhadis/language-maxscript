@@ -5,6 +5,17 @@ fileTypes: ["ms", "mcr", "mce"]
 foldingStartMarker: "(-{2})?\\(\\s*$"
 foldingStopMarker:  "^\\s*(-{2})?\\s*\\)"
 patterns: [
+	
+	# Pull some shared pattern-matching juice from the "repositories" dictionary, further down the file
+	{ "include": "#basic-punctuation"}
+	{ "include": "#double-quotes" }
+	{ "include": "#single-quotes" }
+	{ "include": "#name"  }
+	{ "include": "#float" }
+	{ "include": "#int"   }
+	
+	
+	# Comments
 	{
 		"name":  "comment.line.double-dash.maxscript"
 		"begin": "--"
@@ -19,7 +30,10 @@ patterns: [
 			"1": {"name": "punctuation.definition.comment.maxscript"}
 		}
 	}
+	
+	
 
+	# Keywords/Reserved Identifiers
 	{
 		"name":  "keyword.operator.maxscript"
 		"match": '(?i)(?:(\\(|\\)|\\+=?|\\*=?|-=?|\\/=?|\\^|!?=|,|\\[|\\]|:|\'|&|\\{|\\}|={1,2}|<=?|>=?|\\?|\\$|\\.{1,3}|\\\\))|(?:\\b(?<![\\.\\$])(and|as|by|in|not|of|or|to)(?!\\s*:)\\b)'
@@ -41,65 +55,25 @@ patterns: [
 	}
 	
 	{
-		"name":  "constant.language.boolean.true.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])(true|on)(?!\\s*:)\\b"
-	}
-	
-	{
-		"name":  "constant.language.boolean.false.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])(false|off)(?!\\s*:)\\b"
-	}
-	
-	{
-		"name":  "constant.language.math.pi.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])pi(?!\\s*:)\\b"
-	}
-	
-	{
-		"name":  "constant.language.colour.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])(red|green|blue|white|black|orange|yellow|brown|gray)(?!\\s*:)\\b"
-	}
-	
-	{
-		"name":  "constant.language.axis.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])[xyz]_axis(?!\\s*:)\\b"
-	}
-	
-	{
-		"name":  "constant.language.ok.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])ok(?!\\s*:)\\b"
-	}
-	
-	{
-		"name":  "constant.language.undefined.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])undefined(?!\\s*:)\\b"
-	}
-
-	{
-		"name":  "constant.language.unsupplied.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])unsupplied(?!\\s*:)\\b"
-	}
-	
-	{
-		"name":  "constant.language.dontcollect.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])dontcollect(?!\\s*:)\\b"
-	}
-	
-	{
-		"name":  "constant.language.math.euler.maxscript"
-		"match": "(?i)\\b(?<![\\.\\$])e(?!\\s*:)\\b"
-	}
-	
-	{
 		"name":  "keyword.reserved.maxscript"
 		"match": "(?i)\\b(?<![\\.\\$])(from)(?!\\s*:)\\b"
 	}
 	
-	{
-		"name":  "punctuation.terminator.statement.maxscript"
-		"match": ";"
-	}
 	
+	# Constant values
+	{ "name":  "constant.language.boolean.true.maxscript",    "match": "(?i)\\b(?<![\\.\\$])(true|on)(?!\\s*:)\\b" }
+	{ "name":  "constant.language.boolean.false.maxscript",   "match": "(?i)\\b(?<![\\.\\$])(false|off)(?!\\s*:)\\b" }
+	{ "name":  "constant.language.math.pi.maxscript",         "match": "(?i)\\b(?<![\\.\\$])pi(?!\\s*:)\\b" }
+	{ "name":  "constant.language.colour.maxscript",          "match": "(?i)\\b(?<![\\.\\$])(red|green|blue|white|black|orange|yellow|brown|gray)(?!\\s*:)\\b" }
+	{ "name":  "constant.language.axis.maxscript",            "match": "(?i)\\b(?<![\\.\\$])[xyz]_axis(?!\\s*:)\\b" }
+	{ "name":  "constant.language.ok.maxscript",              "match": "(?i)\\b(?<![\\.\\$])ok(?!\\s*:)\\b" }
+	{ "name":  "constant.language.undefined.maxscript",       "match": "(?i)\\b(?<![\\.\\$])undefined(?!\\s*:)\\b" }
+	{ "name":  "constant.language.unsupplied.maxscript",      "match": "(?i)\\b(?<![\\.\\$])unsupplied(?!\\s*:)\\b" }
+	{ "name":  "constant.language.dontcollect.maxscript",     "match": "(?i)\\b(?<![\\.\\$])dontcollect(?!\\s*:)\\b" }
+	{ "name":  "constant.language.math.euler.maxscript",      "match": "(?i)\\b(?<![\\.\\$])e(?!\\s*:)\\b" }
+	
+	
+	# Arrays
 	{
 		"name":  "storage.type.array.maxscript"
 		"begin": "(#)\\s*(\\()"
@@ -110,6 +84,7 @@ patterns: [
 		"endCaptures":
 			"0": {"name": "meta.brace.round.maxscript"}
 		"patterns": [
+			{"include": "#basic-punctuation"},
 			{"include": "#double-quotes"},
 			{"include": "#single-quotes"},
 			{"include": "#float"},
@@ -117,13 +92,39 @@ patterns: [
 		]
 	}
 	
-	{ "include": "#double-quotes" }
-	{ "include": "#single-quotes" }
-	{ "include": "#float" }
-	{ "include": "#int" }
+	
+	# BitArrays
+	{
+		"name":  "storage.type.bitarray.maxscript"
+		"begin": "(#)\\s*(\\{)"
+		"beginCaptures":
+			"1": {"name": "punctuation.definition.bit.array.begin.maxscript"}
+			"2": {"name": "meta.brace.curly.maxscript"}
+		"end":  "\\}"
+		"endCaptures":
+			"0": {"name": "meta.brace.curly.maxscript"}
+		"patterns": [
+			{"include": "#basic-punctuation"},
+			{"include": "#bit-range"}
+			{"include": "#double-quotes"},
+			{"include": "#single-quotes"},
+			{"include": "#float"},
+			{"include": "#int"}
+		]
+	}
 ]
 
+
+
+# Library of repeatable/reusable patterns, referenced by a named ID
 repository: {
+	"basic-punctuation":{
+		"patterns": [
+			{ "name":  "punctuation.terminator.statement.maxscript",   "match": ";" }
+			{ "name":  "meta.delimiter.comma.maxscript",               "match": "," }
+		]
+	}
+	
 	"single-quotes": {
 		"patterns": [{
 			"name":  "string.quoted.single.maxscript"
@@ -158,6 +159,19 @@ repository: {
 		}]
 	}
 	
+	"name": {
+		"patterns": [{
+			"name":  "string.other.name.maxscript"
+			"match": "(#)(?:('[^']*')|(\\w+))"
+			"captures": {
+				"1": {"name": "punctuation.definition.name.begin.maxscript"}
+				"2": {"name": "punctuation.definition.name.quoted.maxscript"}
+				"3": {"name": "punctuation.definition.name.unquoted.maxscript"}
+			}
+		}]
+	}
+	
+	
 	"float": {
 		"patterns": [{
 			"name":  "constant.numeric.float.maxscript"
@@ -175,6 +189,20 @@ repository: {
 		"patterns": [{
 			"name":  "constant.numeric.int.maxscript"
 			"match": '(?<!\\$)\\b\\d+\\b'
+		}]
+	}
+	
+	
+	# Not a real datatype in MAXScript, per se: part of BitArray definitions
+	"bit-range": {
+		"patterns": [{
+			"name":  "storage.type.bit-range.maxscript"
+			"match": '(?<!\\$)\\b(\\d+)(\\.{2})(\\d+)\\b'
+			"captures": {
+				"1": {"name": "bit-range.begin"}
+				"2": {"name": "bit-range.middle"}
+				"3": {"name": "bit-range.end"}
+			}
 		}]
 	}
 }
