@@ -1,0 +1,2 @@
+# Exclude certain files from being evaluated by Linguist
+lists/* linguist-documentation
