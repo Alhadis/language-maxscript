@@ -1,2 +1,6 @@
 # Exclude certain files from being evaluated by Linguist
 lists/* linguist-documentation
+
+# Force Windows-style newlines for MAXScript files
+*.ms  text eol=crlf
+*.mcr text eol=crlf
