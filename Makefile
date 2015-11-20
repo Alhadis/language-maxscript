@@ -1,6 +1,7 @@
-terms:
-	@build/filter-output.js lists/MaxAll.txt
+UTILS        := utils
+MXS_DUMP     := lists/all.txt
 
-all: terms
+terms:
+	@$(UTILS)/extract.js $(MXS_DUMP)
 
 .PHONY: terms
