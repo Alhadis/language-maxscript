@@ -5,6 +5,7 @@
  * Functions that are too mesh-specific and nitty-gritty belong here.
  */
 
+function singleLine a b keyword:#optional = a + b
 
 
 --	Selects the vertices that match the specified flag bit.

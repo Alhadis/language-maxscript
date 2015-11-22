@@ -9,9 +9,11 @@ MacroScript whitePaint
 	button 
 	clearListener ();	addListController()
 	clearListener();	addListController ()
-		
+	
 	shapes[8]
 	objects
+
+	fn something = 
 	
 	
 	local verbatim = @"Everything's gonna be alright!
@@ -19,6 +21,9 @@ MacroScript whitePaint
 	-- Nobody Ever";
 	
 	angle lightDirection 
+	
+	with redraw off(
+	)
 	
 	-- Fills the Material Editor palette with InkNPaint Shaders
 	on Execute do(
