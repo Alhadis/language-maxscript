@@ -58,7 +58,7 @@ function meshRefresh p = (
 --	Safely detaches an Editable Mesh's subobject selection, based on level.
 --	*	Note: This only works with editable base objects; modifiers are ignored.
 global meshDetach;
-function meshDetach obj lvl del:true uName:unsupplied = (
+mapped function meshDetach obj lvl del:true uName:unsupplied = (
 	local result, sel;
 	
 	--	Vertex
