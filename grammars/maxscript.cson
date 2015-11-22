@@ -112,6 +112,14 @@ repository: {
 		]
 	}
 	
+	"keyword-parameter": {
+		"patterns": [{
+			"comment": "Matches keyword assignment in function calls and definitions (e.g., fn add flag:#optional)" 
+			"name":    "variable.keyword-parameter.maxscript"
+			"match":   '\\w+:'
+		}]
+	}
+	
 	"single-quotes": {
 		"patterns": [{
 			"name":  "string.quoted.single.maxscript"
@@ -154,6 +162,7 @@ repository: {
 			}
 		]
 	}
+	
 	
 	"name": {
 		"patterns": [{
@@ -235,6 +244,7 @@ repository: {
 	"variables":{
 		"patterns": [
 			{ "include": "#basic-punctuation"}
+			{ "include": "#keyword-parameter"}
 			{ "include": "#double-quotes" }
 			{ "include": "#single-quotes" }
 			{ "include": "#name"  }

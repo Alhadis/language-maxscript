@@ -7,6 +7,12 @@
 
 function singleLine a b keyword:#optional = a + b
 
+function starField count extent:[200,200,200] pos:[0,0,0] = (
+	local f = pos - extent / 2
+	for i = 1 to count do
+		sphere name: "Star" radius:(random 0.1 2.0) position:(random f t) segs:4 smooth:false
+)
+
 
 --	Selects the vertices that match the specified flag bit.
 --	*	Primarily intended for feedback during code development.
