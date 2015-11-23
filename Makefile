@@ -1,7 +1,14 @@
 UTILS        := utils
+EXTRACT      := $(UTILS)/extract.js
 MXS_DUMP     := lists/all.txt
 
 terms:
-	@$(UTILS)/extract.js $(MXS_DUMP) VARIABLE Const
+	@$(EXTRACT) $(MXS_DUMP) FUNCTION Normal
 
-.PHONY: terms
+
+# Print a decorated inheritance tree to illustrate MAXScript topology
+graph:
+	@$(EXTRACT) $(MXS_DUMP) --graph
+
+
+.PHONY: terms graph

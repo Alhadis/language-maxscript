@@ -193,7 +193,33 @@ class TermReader{
 				let typeObj  = this.termsByName[type];
 				if(typeObj)
 					t.type   = typeObj;
-				//else console.warn(`NOTICE: Unrecognised term type "${type}" (Term name: ${t.name})`);
+			}
+			
+			
+			/** Finally, resolve the effective variable category of each term */
+			for(let t of this.terms){
+
+				/** Check the primary/common class types */
+				switch((t.type.name || "").toUpperCase()){
+					case "MAXCLASS":
+					case "CLASS":           t.category = TYPE_CLASS;        break;
+					case "MAXSUPERCLASS":   t.category = TYPE_SUPERCLASS;   break;
+					case "INTERFACE":       t.category = TYPE_INTERFACE;    break;
+					case "OBJECTSET":       t.category = TYPE_OBJECTSET;    break;
+					case "STRUCTDEF":       t.category = TYPE_STRUCTDEF;    break;
+					
+					/** Still undefined? */
+					default:{
+						let isFunc = /(Node|Mapped)?Generic|MAXScriptFunction|Primitive/i;
+						
+						/** Check if this is a function/method of some description */
+						if(isFunc.test(t.type.name) || /\(\)$/.test(t.formatted))
+							t.category = TYPE_FUNCTION;
+						
+						/** As a last resort, just lump it as a generic "variable" object */
+						else t.category = TYPE_VARIABLE;
+					}
+				}
 			}
 		}
 
@@ -272,27 +298,9 @@ class TermReader{
 		termType  = parseInt(termType) || TERM_TYPE_NORMAL;
 		let terms = [];
 		
-		let classesByKeyword = {
-			[TYPE_CLASS]:        ["MAXClass", "Class"],
-			[TYPE_SUPERCLASS]:   ["MAXSuperClass"],
-			[TYPE_INTERFACE]:    ["Interface"],
-			[TYPE_OBJECTSET]:    ["ObjectSet"],
-			[TYPE_STRUCTDEF]:    ["StructDef"],
-			[TYPE_FUNCTION]:     ["Generic", "MappedGeneric", "MAXScriptFunction", "NodeGeneric", "Primitive"],
-		};
-		
-		let shouldAdd = term => classesByKeyword[type].indexOf(term.type) > -1;
-		
-		/** Anything not assigned to a keyword type above is considered a generic "variable". */
-		if(TYPE_VARIABLE === type){
-			let names  = Object.keys(classesByKeyword).map(v => classesByKeyword[v].join("|")).join("|");
-			let rNames = RegExp(`^\s*(${names})\s*$`, "i");
-			shouldAdd  = term => false === rNames.test(term.type);
-		}
-
 		/** Collect each defined variable name */
 		for(let t of this.terms)
-			shouldAdd(t) && t.termType === termType && terms.push(t.name);
+			t.category === type && t.termType === termType && terms.push(t.name);
 		
 		/** Alphabetise and return that shit */
 		return this.sort(terms);
@@ -388,12 +396,16 @@ class TermReader{
 /** Let's get this happening */
 let reader  = new TermReader(process.argv[2], true);
 
-reader.graph();
 
+/** Print an inheritance tree */
+if(process.argv[3] === "--graph")
+	reader.graph();
 
-//console.log(reader.termsByName);
-let list    = reader.listByType(
-	eval("TYPE_"      + (process.argv[3] || "VARIABLE").toUpperCase().replace(/\W+/g, "_")),
-	eval("TERM_TYPE_" + (process.argv[4] || "NORMAL").toUpperCase().replace(/\W+/g, "_"))
-);
-//console.log(list.join("\n"));
+/** Regular operation */
+else{
+	let list    = reader.listByType(
+		eval("TYPE_"      + (process.argv[3] || "VARIABLE").toUpperCase().replace(/\W+/g, "_")),
+		eval("TERM_TYPE_" + (process.argv[4] || "NORMAL").toUpperCase().replace(/\W+/g, "_"))
+	);
+	console.log(list.join("\n"));
+}
