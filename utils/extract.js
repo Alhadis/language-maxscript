@@ -99,7 +99,8 @@ class Term{
 		let propsList = this.properties && this.properties.length ? ("(\n  " + this.properties.join(",\n  ") + ")") : "";
 		let isConst   = this.builtIn ? "const " : "";
 		let formatted = (this.formatted || this.name);
-		return this.name + " (" + isConst + this.type + "): " + (propsList ? formatted.replace(/\($/, "") : "") + propsList;
+		let type      = typeof this.type === "string" ? this.type : this.type.name;
+		return this.name + " (" + isConst + type + "): " + (propsList ? formatted.replace(/\($/, "") : "") + propsList;
 	}
 }
 
@@ -171,7 +172,8 @@ class TermReader{
 			
 			
 			/** Declare the arrays we'll be piling each generated Term instance into */
-			let terms     = [];
+			let terms        = [];
+			let termsByName  = {};
 			
 			/** Match each listed term */
 			let m, match  = /(?:^|\n)(\w+)\s+\((const|system)?\s*([^\)]+)\):\s+([^\n]*)((?:\n\x20{2}[^\n]+)*)/gmi;
@@ -179,9 +181,20 @@ class TermReader{
 				m.shift();
 				let term  = new Term(...m);
 				terms.push(term);
+				termsByName[term.name.toUpperCase()] = term;
 			}
 			
-			this.terms = terms;
+			this.terms       = terms;
+			this.termsByName = termsByName;
+			
+			/** Replace each term's "type" property with a reference to the actual term object itself */
+			for(let t of this.terms){
+				let type     = ("string" === typeof t.type ? t.type : t.type.name).toUpperCase();
+				let typeObj  = this.termsByName[type];
+				if(typeObj)
+					t.type   = typeObj;
+				//else console.warn(`NOTICE: Unrecognised term type "${type}" (Term name: ${t.name})`);
+			}
 		}
 
 
@@ -237,8 +250,8 @@ class TermReader{
 	 */
 	sort(input){
 		if(this.caseless) return input.sort((A, B) => {
-			let a = this.caseless ? A.toLowerCase() : A;
-			let b = this.caseless ? B.toLowerCase() : B;
+			let a = this.caseless ? (A + "").toLowerCase() : A;
+			let b = this.caseless ? (B + "").toLowerCase() : B;
 			if(a < b) return -1;
 			if(a > b) return 1;
 			return 0;
@@ -284,13 +297,103 @@ class TermReader{
 		/** Alphabetise and return that shit */
 		return this.sort(terms);
 	}
+	
+	
+	
+	/**
+	 * Return a reference to a particular Term, queried case-insensitively by name.
+	 *
+	 * @param {String|Term} input - Term's name to search for
+	 * @return {Term}
+	 */
+	getTerm(input){
+		
+		/** Heh. Nothing to do here. */
+		if(input instanceof Term) return input;
+		
+		let name = input.toString().toUpperCase();
+		return this.termsByName[name];
+	}
+	
+	
+	
+	/**
+	 * Return a list of every Term that implements a particular parent Term.
+	 *
+	 * @param {String|Term} term
+	 * @return {Array}
+	 */
+	getSubclassesOf(term){
+		let results = [];
+		term = this.getTerm(term);
+		
+		/** Bail early if there wasn't a term with this name */
+		if(!term) return results;
+		
+		for(let i of this.terms)
+			if(i.type === term) results.push(i);
+		
+		return this.sort(results);
+	}
+	
+	
+	
+	/**
+	 * Recursively display the subclasses of a named MAXScript term.
+	 *
+	 * Cute effect, but functionally useless in this scenario.
+	 *
+	 * NOTE: If the output looks crappy and you're using the Monaco typeface in your terminal,
+	 * do yourself a favour and check this out: https://github.com/Alhadis/Menloco
+	 *
+	 * @param {String} parent - Name of the parent class. Defaults to "Class" (the top-most superclass)
+	 * @param {Number} levels - Number of levels deep into recursion. Tracked internally.
+	 */
+	graph(parent, levels){
+		
+		/** Prevent any recursive backreferences */
+		this.graph.cache = this.graph.cache || {};
+		let cache = this.graph.cache;
+		if(!cache[parent])
+			cache[parent] = true;
+		else return;
+		
+		/** Start fetching the data to display */
+		let subclasses    = this.getSubclassesOf(parent || "Class");
+		let currentLevel  = (levels || 0) + 1;
+		let numSubclasses = subclasses.length;
+		
+		/** Make sure there's something to display */
+		if(numSubclasses){
+			let prepend   = Array((currentLevel + 1) / 2).join(String.fromCodePoint(0x2502) + "   ");
+			let colourOn  = "\x1B[38;5;58m";
+			let colourOff = "\x1B[0m";
+			
+			/** Start display each subclass on its own row */
+			for(let i = 0; i < numSubclasses; ++i){
+				let name      = subclasses[i].name;
+				let branch    = String.fromCodePoint(i >= numSubclasses - 1 ? 0x2514 : 0x251C) + Array(3).join(String.fromCodePoint(0x2500)) + " ";
+				
+				console.log(colourOn + prepend + branch + colourOff + name);
+				this.graph(name, currentLevel + 1);
+			}
+			
+			/** Add an extra row for breathing space */
+			console.log(colourOn + prepend + colourOff);
+		}
+	}
 }
 
 
 /** Let's get this happening */
 let reader  = new TermReader(process.argv[2], true);
+
+reader.graph();
+
+
+//console.log(reader.termsByName);
 let list    = reader.listByType(
 	eval("TYPE_"      + (process.argv[3] || "VARIABLE").toUpperCase().replace(/\W+/g, "_")),
 	eval("TERM_TYPE_" + (process.argv[4] || "NORMAL").toUpperCase().replace(/\W+/g, "_"))
 );
-console.log(list.join("\n"));
+//console.log(list.join("\n"));
