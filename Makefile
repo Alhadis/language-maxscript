@@ -2,21 +2,23 @@
 # Language-related variables
 MAJOR_TYPES := variable class superclass interface objectset structdef function
 MINOR_TYPES := normal const system
-DUMP_FILE   := lists/all.txt
+
 
 # Build-related variables
 OBJECTS     := $(sort $(foreach minor,$(MINOR_TYPES),$(addsuffix -$(minor),$(MAJOR_TYPES))))
 OBJDIR      := lists/junk
 OBJEXT      := .txt
+GRAMMAR     := grammars/maxscript.cson
 
 
 # Binaries
-EXTRACT     := utils/extract.js $(DUMP_FILE)
+EXTRACT     := utils/extract.js lists/all.txt
+BUNDLER     := utils/keyword-bundler.js $(GRAMMAR)
 
 
-all: terms
+all: terms dictionaries
 
-.PHONY: clean graph
+.PHONY: clean graph %-dictionary
 
 
 #==============================================================================
@@ -35,13 +37,22 @@ graph:
 terms: $(OBJDIR) $(OBJECTS:%=$(OBJDIR)/%$(OBJEXT))
 
 
+# Compile all dictionaries
+dictionaries: $(OBJECTS:%=%-dictionary)
+
+
+# Compile a dictionary of language keywords
+%-dictionary:
+	@$(BUNDLER) $* < lists/junk/$*$(OBJEXT)
+
+
 #==============================================================================
 
 # Create the objects directory if it's not been generated yet
 $(OBJDIR):
-	mkdir -p $@
+	@test -d "$@" || mkdir "$@"
 
 
 # Build a single list of terms
 $(OBJDIR)/%$(OBJEXT):
-	$(EXTRACT) $(subst -, ,$(basename $(@F))) > $@
+	@$(EXTRACT) $(subst -, ,$(basename $(@F))) > $@
