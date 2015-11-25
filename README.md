@@ -2,7 +2,7 @@
 
 This package adds support for [MAXScript](http://www.autodesk.com/3dsmax-maxscript-2012-enu), the built-in scripting language for [Autodesk® 3ds Max®](http://www.autodesk.com.au/products/3ds-max/overview). If you have no idea what either of those are, you needn't bother installing this.
 
-![Up and Atom](preview.png)
+![Up and Atom](https://raw.githubusercontent.com/Alhadis/language-maxscript/master/preview.png)
 
 
 Contributing
@@ -12,7 +12,7 @@ This was more work than I thought it would be, so if anything appears even remot
 
 Usage
 -----
-Some users might wish to replicate the same look-and-feel of 3DS Max's built-in editor. In which case, they can use [this](mxs-scintilla.less) as a starting-point:
+Some users may wish to replicate the same look-and-feel of 3DS Max's built-in editor. In which case, they can use [this](mxs-scintilla.less) as a starting-point:
 
 
 ```less
