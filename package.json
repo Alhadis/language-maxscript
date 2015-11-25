@@ -1,7 +1,7 @@
 {
 	"name": "language-maxscript",
-	"version": "1.0.0",
-	"description": "Adds syntax highlighting to MAXScript files in Atom.",
+	"version": "1.0.1",
+	"description": "MAXScript language support for Atom.",
 	"keywords": ["3ds max", "3ds", "3D Studio Max", "MAXScript", "MAX Script", "Autodesk", "3DSMAX", "3D"],
 	"repository": "https://github.com/Alhadis/language-maxscript",
 	"license": "MIT",
