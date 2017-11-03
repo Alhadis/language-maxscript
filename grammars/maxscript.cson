@@ -11,7 +11,7 @@ repository:
 		patterns: [
 			{include: "#punctuation"}
 			{include: "#parameter"}
-			{include: "#strings" }
+			{include: "#strings"}
 			{include: "#name"}
 			{include: "#time"}
 			{include: "#float"}
@@ -51,7 +51,7 @@ repository:
 			4: name: "variable.positional.parameter.maxscript"
 		endCaptures:
 			0: name: "keyword.operator.maxscript"
-		patterns: [include: "#main"]
+		patterns: [include: "$self"]
 	
 	
 	# Operators, keywords, and reserved identifiers
@@ -121,8 +121,8 @@ repository:
 			{name:  "punctuation.terminator.statement.maxscript",   match: ";"}
 			{name:  "punctuation.delimiter.comma.maxscript",        match: ","}
 			{name:  "punctuation.brace.curly.maxscript",            match: "{|}"}
-			{name:  "punctuation.brace.round.maxscript",            match: "(|)"}
-			{name:  "punctuation.brace.square.maxscript",           match: "[|]"}
+			{name:  "punctuation.brace.round.maxscript",            match: "\\(|\\)"}
+			{name:  "punctuation.brace.square.maxscript",           match: "\\[|\\]"}
 			{name:  "punctuation.delimiter.period.maxscript",       match: "\\.(?!\\d)"}
 		]
 
@@ -165,7 +165,7 @@ repository:
 
 
 	name:
-		name:  "string.other.name.maxscript"
+		name:  "constant.other.name.maxscript"
 		match: "(#)(?:('[^']*')|(\\w+))"
 		captures:
 			1: name: "punctuation.definition.name.begin.maxscript"
