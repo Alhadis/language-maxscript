@@ -1,3 +1,1 @@
-# Force Windows-style newlines for MAXScript files
-*.ms  text eol=crlf
-*.mcr text eol=crlf
+tests linguist-documentation=true

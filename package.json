@@ -4,9 +4,5 @@
 	"description": "MAXScript language support for Atom.",
 	"keywords": ["3ds max", "3ds", "3D Studio Max", "MAXScript", "MAX Script", "Autodesk", "3DSMAX", "3D"],
 	"repository": "https://github.com/Alhadis/language-maxscript",
-	"license": "ISC",
-	"engines": {
-		"atom": "*"
-	},
-	"dependencies": {}
+	"license": "ISC"
 }
