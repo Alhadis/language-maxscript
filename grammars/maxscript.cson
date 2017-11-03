@@ -51,7 +51,7 @@ repository:
 			4: name: "variable.positional.parameter.maxscript"
 		endCaptures:
 			0: name: "keyword.operator.maxscript"
-		patterns: ["include": "#main"]
+		patterns: [include: "#main"]
 	
 	
 	# Operators, keywords, and reserved identifiers
@@ -94,30 +94,24 @@ repository:
 	arrays:
 		patterns: [{
 			name: "storage.type.array.maxscript"
-			patterns: ["include": "#main"]
-			begin: "(#)\\s*(\\()"
+			patterns: [include: "#main"]
+			begin: "#\\s*\\("
 			end: "\\)"
-			beginCaptures:
-				1: name: "punctuation.definition.array.begin.maxscript"
-				2: name: "meta.brace.round.maxscript"
-			endCaptures:
-				0: name: "meta.brace.round.maxscript"
+			beginCaptures: 0: name: "punctuation.definition.array.begin.maxscript"
+			endCaptures:   0: name: "punctuation.definition.array.end.maxscript"
 		},{
 			name: "storage.type.bitarray.maxscript"
-			begin: "(#)\\s*(\\{)"
+			begin: "(#)\\s*\\{"
 			end: "\\}"
-			beginCaptures:
-				1: "name": "punctuation.definition.bit.array.begin.maxscript"
-				2: "name": "meta.brace.curly.maxscript"
-			endCaptures:
-				0: "name": "meta.brace.curly.maxscript"
+			beginCaptures: 0: name: "punctuation.definition.bit.array.begin.maxscript"
+			endCaptures:   0: name: "punctuation.definition.bit.array.end.maxscript"
 			patterns: [{
 				name: "storage.type.bit-range.maxscript"
 				match: "(?<!\\$)\\b(\\d+)(\\.{2})(\\d+)\\b"
 				captures:
 					1: name: "bit-range.begin"
 					2: name: "bit-range.middle"
-					3: name: "bit-range.end",
+					3: name: "bit-range.end"
 			}, include: "#main"]
 		}]
 
@@ -125,11 +119,11 @@ repository:
 	punctuation:
 		patterns: [
 			{name:  "punctuation.terminator.statement.maxscript",   match: ";"}
-			{name:  "meta.delimiter.comma.maxscript",               match: ","}
-			{name:  "meta.brace.curly.maxscript",                   match: "{|}"}
-			{name:  "meta.brace.round.maxscript",                   match: "(|)"}
-			{name:  "meta.brace.square.maxscript",                  match: "[|]"}
-			{name:  "meta.delimiter.period.maxscript",              match: "\\.(?!\\d)"}
+			{name:  "punctuation.delimiter.comma.maxscript",        match: ","}
+			{name:  "punctuation.brace.curly.maxscript",            match: "{|}"}
+			{name:  "punctuation.brace.round.maxscript",            match: "(|)"}
+			{name:  "punctuation.brace.square.maxscript",           match: "[|]"}
+			{name:  "punctuation.delimiter.period.maxscript",       match: "\\.(?!\\d)"}
 		]
 
 
@@ -144,8 +138,8 @@ repository:
 			name:  "string.quoted.single.maxscript"
 			begin: "'"
 			end:   "'"
-			beginCaptures: 0: "name": "punctuation.definition.string.begin.maxscript"
-			endCaptures:   0: "name": "punctuation.definition.string.end.maxscript"
+			beginCaptures: 0: name: "punctuation.definition.string.begin.maxscript"
+			endCaptures:   0: name: "punctuation.definition.string.end.maxscript"
 			patterns: [
 				name: "constant.character.escape.maxscript"
 				match: "\\\\(\\*|\\?|\\\\|')"
