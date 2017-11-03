@@ -1,1 +1,1 @@
-tests linguist-documentation=true
+tests/* linguist-documentation
