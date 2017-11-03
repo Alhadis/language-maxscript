@@ -1,5 +1,5 @@
 ".source.maxscript":
 	editor:
 		commentStart: "-- "
-		increaseIndentPattern: '(?i)^.*(?:\\([^\\)]*|(?<![\\.\\$])\\b(?:then|else|with|do)\\s*|=\\s*)$'
-		decreaseIndentPattern: '^\\s*\\)'
+		increaseIndentPattern: "(?i)^.*(?:\\([^\\)]*|(?<![\\.\\$])\\b(?:then|else|with|do)\\s*|=\\s*)$"
+		decreaseIndentPattern: "^\\s*\\)"
