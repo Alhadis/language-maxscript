@@ -1,1 +1,5 @@
 tests/* linguist-documentation
+
+# Excluded package files
+tests export-ignore
+preview.png export-ignore
